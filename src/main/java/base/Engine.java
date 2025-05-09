@@ -64,7 +64,7 @@ public class Engine {
     }
 
     public <Page extends PageObjectModel> Page launchChrome(Class<Page> type ) throws MalformedURLException, InterruptedException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, InvalidKeyException {
-        String path="C:\\chromeDriver\\131\\chromedriver.exe";
+        String path="C:\\chromeDriver\\131 \\chromedriver.exe";
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--remote-allow-origins=*");
         System.setProperty("webdriver.chrome.driver",path);
