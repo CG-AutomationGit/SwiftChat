@@ -24,7 +24,6 @@ public class NS_AutomationRun0001 extends BotBase {
     BotList botList;
     Chat chat;
 
-
     @BeforeTest(alwaysRun = true)
     public void step1_openChrome() throws MalformedURLException, InvalidKeyException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         loginPage = launchChromeForBot("NS",BotLogin.class);

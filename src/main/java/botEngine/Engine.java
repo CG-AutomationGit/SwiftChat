@@ -126,6 +126,10 @@ public class Engine {
                 chromeDriver.get("https://test-bot.convegenius.ai/bots?botId=0273843435587982");
                 ThreadSafeTestContext.setBotName("ATTENDANCE");
                 break;
+            case "FMB":
+                chromeDriver.get("https://test-bot.convegenius.ai/bots?botId=0266578292174848");
+                ThreadSafeTestContext.setBotName("FMB");
+                break;
         }
         chromeDriver.manage().window().maximize();
       /*  ((JavascriptExecutor) chromeDriver).executeScript("document.body.style.zoom='67%';");

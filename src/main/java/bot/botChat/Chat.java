@@ -99,6 +99,15 @@ public class Chat extends BotBase implements FilesPath {
         validateResponseString(filePathForORF ,str1);
     }
 
+    public void validateResponseStringForFBA(String str1 , String str2) throws IOException {
+        validateResponseString(filePathForFMB ,str1, str2);
+    }
+    public void validateResponseStringForFBA(String str1 , String str2 , String str3) throws IOException, InterruptedException {
+        validateResponseString(filePathForFMB ,str1, str2, str3);
+    }
+    public void validateResponseStringForFBA(String str1) throws IOException {
+        validateResponseString(filePathForFMB ,str1);
+    }
 
     public void ignoreHint() throws InterruptedException {
 

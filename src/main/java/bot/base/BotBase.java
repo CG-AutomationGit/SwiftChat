@@ -110,6 +110,9 @@ public class BotBase extends PageObjectModel {
                            stringIDCell = row.getCell(0);
                            lanString = row.getCell(9);
                           break;
+                      case "FMB":
+                          /*stringIDCell = row.getCell(0);
+                          lanString = row.getCell(8);*/
                   }
 
             if (stringIDCell != null && StringID.equalsIgnoreCase(stringIDCell.getStringCellValue().trim())){
