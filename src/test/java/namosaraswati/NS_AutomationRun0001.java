@@ -31,7 +31,7 @@ public class NS_AutomationRun0001 extends BotBase {
     }
 
     @Test(priority = 1)
-    public void login() throws MalformedURLException, InvalidKeyException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    public void login() throws InvalidKeyException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         botList = loginPage.loginWithMobileNumber("9723064078");
         botList.waitFor(20);
     }

@@ -5,7 +5,6 @@ import bot.base.BotBase;
 import bot.botChat.BotList;
 import bot.botChat.BotSettings;
 import bot.botChat.Chat;
-import org.openqa.selenium.support.ui.Select;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 

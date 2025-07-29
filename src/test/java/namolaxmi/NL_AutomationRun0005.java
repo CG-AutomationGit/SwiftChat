@@ -6,7 +6,6 @@ import bot.botChat.BotList;
 import bot.botChat.Chat;
 import bot.webview.WebViewBase;
 import bot.webview.namo_lakshmi.NamoBotsWebView;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
