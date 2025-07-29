@@ -8,5 +8,6 @@ public interface AT_Data {
     String schoolName = "SKP PRANAMI PRI.SEC.SCHOOL";
     String schoolBlock= "RAJKOT CORPORATION";
     String schoolDistrict = "RAJKOT";
+    String schoolState = "GUJARAT";
 
 }

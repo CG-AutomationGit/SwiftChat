@@ -96,7 +96,7 @@ public class PageObjectModel extends Engine{
         ((org.openqa.selenium.JavascriptExecutor) chromeDriver)
                 .executeScript("window.scrollBy(0, 0);");
         Thread.sleep(1000);
-        System.out.println("Scroll up completed.");
+        System.out.println("Scroll up completed..");
     }
 
     // Java

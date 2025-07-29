@@ -34,6 +34,8 @@ public interface BotData {
     String sectionK = "K";
     String grade12 = "Class 12";
     String sectionL = "L";
+    String grade13 = "Class 13";
+    String sectionM = "M";
 
 
 

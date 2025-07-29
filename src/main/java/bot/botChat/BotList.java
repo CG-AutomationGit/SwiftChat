@@ -12,7 +12,7 @@ public class BotList extends BotBase {
     }
 
 
-    public Chat selectBotFromList(String botName) throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
+    public Chat selectBotFromLists(String botName) throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
         // Locate the bot element from the list based on its name
         By botElementLocator = By.xpath("//div[contains(@class, 'bot-list-item') and text()='" + botName + "']");
         chromeDriver.findElement(botElementLocator).click();

@@ -35,7 +35,7 @@ public class BotLogin extends BotBase {
             // Click the "Send OTP" button
             sendOTPButton.click();
 
-            System.out.println("Login successful: OTP sent to " + mobileNumber);
+            System.out.println("Login successful:: OTP sent to " + mobileNumber);
         } catch (Exception e) {
             System.err.println("Failed to login using mobile number: " + e.getMessage());
         }

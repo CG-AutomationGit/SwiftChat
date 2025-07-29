@@ -64,7 +64,7 @@ public class NamoBotsWebView extends WebViewBase {
             softAssert.assertTrue(studentGradeField.isDisplayed(),
                     "Student Grade field is not displayed");
             softAssert.assertTrue(studentSectionField.isDisplayed(),
-                     "Student Section field is not displayed");
+                     "Student Section field is not displayed.");
             softAssert.assertAll();
         }
         else if(tabName.equals("Search Student")){

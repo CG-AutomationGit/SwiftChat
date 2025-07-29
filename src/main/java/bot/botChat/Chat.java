@@ -525,7 +525,7 @@ public class Chat extends BotBase implements FilesPath {
         selectClassByName("Class 12");
     }
 
-    // Select randomly from Class 1 to Class 12
+    // Select randomly from Class 1 to Class 12 //
     public void selectRandomClassOrGrade() throws InterruptedException {
         int randomClassNumber = (int) (Math.random() * 12) + 1; // Random number between 1 and 12
         switch (randomClassNumber) {

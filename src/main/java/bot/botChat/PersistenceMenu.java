@@ -7,4 +7,7 @@ public class PersistenceMenu extends BotBase {
     public PersistenceMenu(ChromeDriver chromeDriver) {
         super(chromeDriver);
     }
+    public void check(){
+
+    }
 }

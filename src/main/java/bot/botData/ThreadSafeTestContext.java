@@ -318,5 +318,8 @@ public class ThreadSafeTestContext {
     public static void clearStudentIdList() {
         studentIdList.remove();
     }
+    public static void clearMedium() {
+        medium.remove();
+    }
 
 }

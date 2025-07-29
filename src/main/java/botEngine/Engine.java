@@ -89,7 +89,7 @@ public class Engine {
 /*  ((JavascriptExecutor) chromeDriver).executeScript("document.body.style.zoom='67%';");
         chromeDriver.navigate().refresh();*//*
 
-        chromeDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        chromeDriver.manage().timeo uts().implicitlyWait(Duration.ofSeconds(10));
         Thread.sleep(5000);
         Page ret = null;
         ret = type.getDeclaredConstructor(ChromeDriver.class).newInstance(this.chromeDriver);

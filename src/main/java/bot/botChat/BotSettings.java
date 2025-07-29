@@ -12,7 +12,7 @@ public class BotSettings extends BotBase {
     // For example, methods to change settings, update preferences, etc.
 
     public void changeLanguage(String language) {
-        // Logic to change the bot's language
+        // Logic to change the bot's languages
     }
 
     public void updateNotificationPreferences(boolean enableNotifications) {

@@ -25,7 +25,7 @@ public class WebViewBase extends Chat {
             tabNameActual = chromeDriver.findElement(
                     By.xpath("//div[@data-toggle='buttons']/span[text()='" + tabName + "']"));
             if(tabNameActual == null) {
-                Assert.fail("Tab with name '" + tabName + "' not found.");
+                Assert.fail("Tab with name '" + tabName + "' not found..");
             }
         } catch (NoSuchElementException e) {
             Assert.fail("Tab with name '" + tabName + "' not found. Please check manually");
