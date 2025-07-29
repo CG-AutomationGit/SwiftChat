@@ -588,22 +588,6 @@ public class Chat extends BotBase implements FilesPath {
 // ...repeat for Class 3 to Class 12
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public void downloadDocument(){
 
         String downloadFilepath = "C:\\Downloads\\testdownloads";  // your custom path
@@ -656,8 +640,6 @@ public class Chat extends BotBase implements FilesPath {
             if (!isDownloaded) {
                 throw new RuntimeException("PDF was not downloaded in expected time");
             }
-
-
 
             Thread.sleep(2000);
         } catch (NoSuchElementException e) {
