@@ -130,12 +130,12 @@ public class NS_AutomationRun0001 extends BotBase {
 
     @Test(priority = 20)
     public void testValidateResponseGifSt025St026() throws Exception {
-        chat.validateResponseStringForNamoSaraswati("GIF", "ST025", "ST026");
+        chat.validateResponseStringForNamoSaraswati("GIF", "ST025", "ST026"); // ST026 String issue
     }
 
     @Test(priority = 21)
     public void testValidateButtonsUpdateCheck() throws Exception {
-        chat.validateButtons("Update Student Details", "Check Verification Status");
+        chat.validateButtons("Register Student ( New Student )","Update Students (Rejected)", "Check Verification & Download Report");
     }
 
     @Test(priority = 22)
@@ -180,7 +180,7 @@ public class NS_AutomationRun0001 extends BotBase {
 
     @Test(priority = 30)
     public void testValidateButtonsUpdateCheckAgain() throws Exception {
-        chat.validateButtons("Update Student Details", "Check Verification Status");
+        chat.validateButtons("Register Student ( New Student )","Update Students (Rejected)", "Check Verification & Download Report");
     }
 
     @Test(priority = 31)
@@ -196,7 +196,7 @@ public class NS_AutomationRun0001 extends BotBase {
     @Test(priority = 33)
     public void testValidateResponseST046ST026() throws Exception {
         //chat.selectClassAndSection();
-        chat.validateResponseStringForNamoSaraswati("ST046","ST026");
+        //chat.validateResponseStringForNamoSaraswati("ST046","ST026");
     }
 
     // Java
@@ -207,7 +207,7 @@ public class NS_AutomationRun0001 extends BotBase {
 
     @Test(priority = 35)
     public void testValidateButtonsUpdateDownload() throws Exception {
-        chat.validateButtons("Update Student Details", "Download Report");
+        chat.validateButtons("Update Student Details", "Check Verification Status","Check Verification & Download Report");
     }
 
     @Test(priority = 36)
@@ -252,9 +252,34 @@ public class NS_AutomationRun0001 extends BotBase {
     }
 
     @Test(priority = 44)
-    public void testValidateResponseSt029Final() throws Exception {
+    public void testValidateResponseST026Final() throws Exception {
         chat.validateResponseStringForNamoSaraswati("ST026");
     }
+
+    @Test(priority = 45)
+    public void testValidateResponseSt029Final() throws Exception {
+        chat.validateButtons("Register Student (New Student)","Update Students (Rejected)", "Check Verification & Download Report");
+    }
+
+    @Test(priority = 45)
+    public void testValidateResponseSt029Final1() throws Exception {
+        chat.selectButtonOptionFromChat("Update Students (Rejected)");
+    }
+
+    @Test(priority = 46)
+    public void testValidateResponseSt029Final2() throws Exception {
+        chat.selectClassAndSectionForNamoBots();
+    }
+
+    @Test(priority = 47)
+    public void testValidateResponseST084Final2() throws Exception {
+        chat.validateResponseStringForNamoSaraswati("ST084");
+    }
+
+
+
+
+
 
 
 

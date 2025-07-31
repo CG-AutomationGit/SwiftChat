@@ -157,14 +157,29 @@ public class BotBase extends PageObjectModel {
     }
 
     public void validateResponseString(String filepath , String str1 , String str2 , String str3) throws IOException, InterruptedException {
+
+
+        String jsonStr = "";
+
+        if(ThreadSafeTestContext.getBotName().equals("NS") || ThreadSafeTestContext.getBotName().equals("NL")) {
+            jsonStr = new String(Files.readAllBytes(Paths.get("src/main/java/bot/botData/ns.json")));
+        } else if(ThreadSafeTestContext.getBotName().equals("ATTENDANCE")) {
+            jsonStr = new String(Files.readAllBytes(Paths.get("bot/botData/attendance_gj.json")));
+        } else if(ThreadSafeTestContext.getBotName().equals("FMB")) {
+            jsonStr = new String(Files.readAllBytes(Paths.get("bot/botData/fmb.json")));
+        }
+
+        JSONObject json = new JSONObject(jsonStr);
+
+
         if(getResponseCount()==3){
+            String expectedString1 ="",expectedString2="",finalExpected1="" ,finalExpected2="",expectedString3="",finalExpected3="";
+
             String actual1 = str1;
             String actual2 = str2;
             String actual3 = str3;
             Thread.sleep(2000);
 
-
-            String expectedString1="", expectedString2="", expectedString3="";
 
 
             if (containsDigit(str1)) {
@@ -176,9 +191,41 @@ public class BotBase extends PageObjectModel {
             if (containsDigit(str3)) {
                 expectedString3 = getCellValueFromExcel(filepath, "String Mapping for v1", str3, "English String");
             }
-            String safeExpected1 = processExpectedString(expectedString1);
+
+            Set<String> placeholders = extractPlaceholders(expectedString1);
+
+            // Step 3: Build map with only needed data
+            Map<String, String> replacementMap = new HashMap<>();
+            for (String key : placeholders) {
+                replacementMap.put(key, json.optString(key, "<" + key + ">")); // fallback to <key> if missing
+            }
+            // Step 4: Replace in template
+            finalExpected1 = replacePlaceholders(expectedString1, replacementMap);
+
+            Set<String> placeholders2 = extractPlaceholders(expectedString1);
+
+            // Step 3: Build map with only needed data
+            Map<String, String> replacementMap2 = new HashMap<>();
+            for (String key : placeholders2) {
+                replacementMap2.put(key, json.optString(key, "<" + key + ">")); // fallback to <key> if missing
+            }
+            // Step 4: Replace in template
+            finalExpected2 = replacePlaceholders(expectedString2, replacementMap2);
+
+            Set<String> placeholders3 = extractPlaceholders(expectedString1);
+
+            // Step 3: Build map with only needed data
+            Map<String, String> replacementMap3 = new HashMap<>();
+            for (String key : placeholders3) {
+                replacementMap3.put(key, json.optString(key, "<" + key + ">")); // fallback to <key> if missing
+            }
+            // Step 4: Replace in template
+            finalExpected3 = replacePlaceholders(expectedString3, replacementMap3);
+
+
+            /*String safeExpected1 = processExpectedString(expectedString1);
             String safeExpected2 = processExpectedString(expectedString2);
-            String safeExpected3 = processExpectedString(expectedString3);
+            String safeExpected3 = processExpectedString(expectedString3);*/
 
             String actualString1 = getFirstStringAfterInput(actual1); // PDF
             Thread.sleep(2000);
@@ -187,9 +234,9 @@ public class BotBase extends PageObjectModel {
                 Assert.assertEquals(actualString1, str1, "String validation failed for first string.");
             }
             else {
-                List<String> ext =  extractBoldSegments(safeExpected1);
+                List<String> ext =  extractBoldSegments(finalExpected1);
                 validateBoldTextInUI(ThreadSafeTestContext.getStringLocator(), ext);
-                Assert.assertTrue(areStringsEquivalent(actualString1, safeExpected1.replace("*","")), "String validation failed for first string.");
+                Assert.assertTrue(areStringsEquivalent(actualString1, finalExpected1.replace("*","")), "String validation failed for first string.");
             }
             String actualString2 = getSecondStringAfterInput(actual2); // GIF
             Thread.sleep(2000);
@@ -198,9 +245,9 @@ public class BotBase extends PageObjectModel {
                 Assert.assertEquals(actualString2, str2, "String validation failed for first string.");
             }
             else {
-                List<String> ext =  extractBoldSegments(safeExpected2);  // ext = 0
+                List<String> ext =  extractBoldSegments(finalExpected2);  // ext = 0
                 validateBoldTextInUI(ThreadSafeTestContext.getStringLocator(), ext);
-                Assert.assertTrue(areStringsEquivalent(actualString2, safeExpected2.replace("*","")), "String validation failed for first string.");
+                Assert.assertTrue(areStringsEquivalent(actualString2, finalExpected2.replace("*","")), "String validation failed for first string.");
             }
             String actualString3 = getThirdStringAfterInput(actual3);   // STRING
 
@@ -208,9 +255,9 @@ public class BotBase extends PageObjectModel {
                 Assert.assertEquals(actualString3, str3, "String validation failed for first string.");
             }
             else {
-                List<String> ext =  extractBoldSegments(safeExpected3);
+                List<String> ext =  extractBoldSegments(finalExpected3);
                 validateBoldTextInUI(ThreadSafeTestContext.getStringLocator(), ext);
-                Assert.assertTrue(areStringsEquivalent(actualString3, safeExpected3.replace("*","")), "String validation failed for first string.");
+                Assert.assertTrue(areStringsEquivalent(actualString3, finalExpected3.replace("*","")), "String validation failed for first string.");
             }
 
         }
@@ -228,52 +275,6 @@ public class BotBase extends PageObjectModel {
     private boolean containsDigit(String s) {
         return s != null && s.matches(".*\\d.*");
     }
-
-    private String processExpectedString(String expected) throws IOException {
-        if (expected == null) return null;
-        String safeExpected = expected;
-        String jsonStr = "";
-
-        if(ThreadSafeTestContext.getBotName().equals("NS") || ThreadSafeTestContext.getBotName().equals("NL")) {
-            jsonStr = new String(Files.readAllBytes(Paths.get("src/main/java/bot/botData/ns.json")));
-        } else if(ThreadSafeTestContext.getBotName().equals("ATTENDANCE")) {
-            jsonStr = new String(Files.readAllBytes(Paths.get("bot/botData/attendance_gj.json")));
-        } else if(ThreadSafeTestContext.getBotName().equals("FMB")) {
-            jsonStr = new String(Files.readAllBytes(Paths.get("bot/botData/fmb.json")));
-        }
-       JSONObject json = new JSONObject(jsonStr);
-
-
-/*
-        if (safeExpected.contains("<teacherCode>"))
-            safeExpected = safeExpected.replace("<teacherCode>", json.getString("teacherID"));
-        if (safeExpected.contains("<teacherID>"))
-            safeExpected = safeExpected.replace("<teacherID>", json.getString("teacherID"));
-        if (safeExpected.contains("<schoolName>"))
-            safeExpected = safeExpected.replace("<schoolName>", json.getString("schoolName"));
-        if (safeExpected.contains("<classNo>"))
-            safeExpected = safeExpected.replace("<classNo>", ThreadSafeTestContext.getGrade());
-        if (safeExpected.contains("<section>"))
-            safeExpected = safeExpected.replace("<section>",ThreadSafeTestContext.getSection());
-        if (safeExpected.contains("<schoolCode>"))
-            safeExpected = safeExpected.replace("<schoolCode>", json.getString("schoolID"));
-        if (safeExpected.contains("<teacherName>"))
-            safeExpected = safeExpected.replace("<teacherName>", json.getString("teacherName"));
-        if (safeExpected.contains("<designation>"))
-            safeExpected = safeExpected.replace("<designation>", json.getString("teacherDesignation"));
-        if (safeExpected.contains("<blockName>"))
-            safeExpected = safeExpected.replace("<blockName>", json.getString("schoolBlock"));
-        if (safeExpected.contains("<districtName>"))
-            safeExpected = safeExpected.replace("<districtName>", json.getString("schoolDistrict"));
-        if (safeExpected.contains("<mediumName>"))
-            safeExpected = safeExpected.replace("<mediumName>", ThreadSafeTestContext.getMedium());
-        if (safeExpected.contains("<block>"))
-            safeExpected = safeExpected.replace("<block>", json.getString("blockName"));
-        if (safeExpected.contains("<district>"))
-            safeExpected = safeExpected.replace("<district>", json.getString("districtName"));*/
-        return safeExpected;
-    }
-
 
     public String getFirstStringAfterInput(String msgType) {
         String str = "";
