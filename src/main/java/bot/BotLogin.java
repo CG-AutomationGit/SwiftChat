@@ -9,6 +9,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 
 import java.lang.reflect.InvocationTargetException;
 import java.time.Duration;
@@ -35,9 +36,9 @@ public class BotLogin extends BotBase {
             // Click the "Send OTP" button
             sendOTPButton.click();
 
-            System.out.println("Login successful:: OTP sent to " + mobileNumber);
+            System.out.println("Login successful: OTP has been sent to " + mobileNumber);
         } catch (Exception e) {
-            System.err.println("Failed to login using mobile number: " + e.getMessage());
+            Assert.fail("Failed to login using mobile number: " + e.getMessage());
         }
         return createBotPageForChrome(BotList.class);
     }

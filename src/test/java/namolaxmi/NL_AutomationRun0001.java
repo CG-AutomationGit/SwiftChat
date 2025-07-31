@@ -11,6 +11,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.security.InvalidKeyException;
 
+import static bot.botData.BotData.*;
 
 
 import static bot.botData.BotData.schoolID;
@@ -25,6 +26,7 @@ public class NL_AutomationRun0001 extends BotBase {
     BotLogin loginPage;
     BotList botList;
     Chat chat;
+
 
     @BeforeTest(alwaysRun = true)
     public void step1_openChrome() throws MalformedURLException, InvalidKeyException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
@@ -191,7 +193,7 @@ public class NL_AutomationRun0001 extends BotBase {
 
     @Test(priority = 32)
     public void testValidateResponseSt042() throws Exception {
-        // chat.validateResponseStringForNamoLaxmi("ST042");
+       // chat.validateResponseStringForNamoLaxmi("ST042");
     }
 
     @Test(priority = 33)
