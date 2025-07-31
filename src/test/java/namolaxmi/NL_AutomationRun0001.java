@@ -13,7 +13,11 @@ import java.security.InvalidKeyException;
 
 import static bot.botData.BotData.*;
 
-public class NL_AutomationRun0001 extends BotBase  {
+
+import static bot.botData.BotData.schoolID;
+import static bot.botData.BotData.teacherID;
+
+public class NL_AutomationRun0001 extends BotBase {
 
     public NL_AutomationRun0001(){
         super(null);
@@ -30,7 +34,7 @@ public class NL_AutomationRun0001 extends BotBase  {
     }
 
     @Test(priority = 1)
-    public void login() throws MalformedURLException, InvalidKeyException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    public void login() throws InvalidKeyException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         botList = loginPage.loginWithMobileNumber("9723064078");
         botList.waitFor(20);
     }
@@ -94,7 +98,7 @@ public class NL_AutomationRun0001 extends BotBase  {
 
     @Test(priority = 13)
     public void testSendSchoolId() throws Exception {
-        chat.sendMessage(schoolID);
+        chat.setSchoolCode();
     }
 
     @Test(priority = 14)
@@ -114,7 +118,7 @@ public class NL_AutomationRun0001 extends BotBase  {
 
     @Test(priority = 17)
     public void testSendTeacherId() throws Exception {
-        chat.sendMessage(teacherID);
+        chat.setTeacherCode();
     }
 
     @Test(priority = 18)
@@ -193,15 +197,16 @@ public class NL_AutomationRun0001 extends BotBase  {
     }
 
     @Test(priority = 33)
-    public void testSelectClassAndSectionAgain() throws Exception {
-        chat.clickRandomButton();
+    public void testValidateResponseST046ST026() throws Exception {
+        //chat.selectClassAndSection();
+        chat.validateResponseStringForNamoLaxmi("ST046","ST026");
     }
 
     // Java
-    @Test(priority = 34)
+   /* @Test(priority = 34)
     public void testValidateResponseSt084() throws Exception {
         chat.validateResponseStringForNamoLaxmi("ST084");
-    }
+    }*/
 
     @Test(priority = 35)
     public void testValidateButtonsUpdateDownload() throws Exception {
@@ -215,17 +220,18 @@ public class NL_AutomationRun0001 extends BotBase  {
 
     @Test(priority = 37)
     public void testValidateResponseSt029Again() throws Exception {
-        //chat.validateResponseStringForNamoLaxmi("ST029");
+        chat.validateResponseStringForNamoLaxmi("ST029");
     }
 
     @Test(priority = 38)
     public void testSelectHomeMenuAgain() throws Exception {
-        chat.selectButtonOptionFromChat("Home Menu");
+        chat.selectPersistentMenuOption("Home Menu");
     }
 
     @Test(priority = 39)
-    public void testValidateResponseSt026Again() throws Exception {
-        chat.validateResponseStringForNamoLaxmi("ST026");
+    public void testValidateResponseST005() throws Exception {
+        chat.validateResponseStringForNamoLaxmi("ST005");
+        chat.selectButtonOptionFromChat("Yes");
     }
 
     @Test(priority = 40)

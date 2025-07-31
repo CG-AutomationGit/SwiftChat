@@ -1,10 +1,7 @@
 package mis.base;
 
-import base.PageObjectModel;
-import io.appium.java_client.android.AndroidDriver;
+import botEngine.PageObjectModel;
 import org.openqa.selenium.chrome.ChromeDriver;
-
-import java.lang.reflect.InvocationTargetException;
 
 public class MIS_Base extends PageObjectModel {
 

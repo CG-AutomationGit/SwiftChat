@@ -25,7 +25,7 @@ public class BotLogin extends BotBase {
     WebElement mobileNumberInput;
     @FindBy(xpath = "//button/p[text()='Send OTP']")
     WebElement sendOTPButton;
-
+//button//p/p[text()='Continue']
 
     public BotList loginWithMobileNumber(String mobileNumber) throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
         try {
