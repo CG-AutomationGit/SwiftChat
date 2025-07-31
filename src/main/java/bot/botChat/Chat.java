@@ -8,6 +8,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.json.JSONObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
@@ -20,24 +21,74 @@ import utility.LangMapper;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 public class Chat extends BotBase implements FilesPath {
     public Chat(ChromeDriver chromeDriver) {
         super(chromeDriver);
     }
+    String jsonStr = "";
 
     public void sendMessage(String message) throws InterruptedException {
+
         chromeDriver.findElement(By.xpath("//textarea[@id='footer']")).sendKeys(message);
         chromeDriver.findElement(By.xpath("//button[@class='MuiButtonBase-root MuiIconButton-root " +
                 "MuiIconButton-sizeMedium chat-footer__send-button css-1yxmbwk']")).click();
         Thread.sleep(2000);
-        if (message.length() == 11 && message.matches("\\d+")) {
-            ThreadSafeTestContext.setSchoolCode(message);
-
+    }
+    public void setSchoolCode() throws InterruptedException, IOException {
+        if(ThreadSafeTestContext.getBotName().equals("NS") || ThreadSafeTestContext.getBotName().equals("NL")) {
+            jsonStr = new String(Files.readAllBytes(Paths.get("src/main/java/bot/botData/ns.json")));
+        } else if(ThreadSafeTestContext.getBotName().equals("ATTENDANCE")) {
+            jsonStr = new String(Files.readAllBytes(Paths.get("bot/botData/attendance_gj.json")));
+        } else if(ThreadSafeTestContext.getBotName().equals("FMB")) {
+            jsonStr = new String(Files.readAllBytes(Paths.get("bot/botData/fmb.json")));
+        }
+        JSONObject json = new JSONObject(jsonStr);
+        if(ThreadSafeTestContext.getBotName().equals("NS") || ThreadSafeTestContext.getBotName().equals("NL")) {
+            chromeDriver.findElement(By.xpath("//textarea[@id='footer']")).sendKeys(json.getString("schoolCode"));
+            chromeDriver.findElement(By.xpath("//button[@class='MuiButtonBase-root MuiIconButton-root " +
+                    "MuiIconButton-sizeMedium chat-footer__send-button css-1yxmbwk']")).click();
+            Thread.sleep(2000);
+            ThreadSafeTestContext.setSchoolCode(json.getString("schoolCode"));
         }
     }
 
+    public void setTeacherCode() throws InterruptedException, IOException {
+        if(ThreadSafeTestContext.getBotName().equals("NS") || ThreadSafeTestContext.getBotName().equals("NL")) {
+            jsonStr = new String(Files.readAllBytes(Paths.get("src/main/java/bot/botData/ns.json")));
+        } else if(ThreadSafeTestContext.getBotName().equals("ATTENDANCE")) {
+            jsonStr = new String(Files.readAllBytes(Paths.get("bot/botData/attendance_gj.json")));
+        } else if(ThreadSafeTestContext.getBotName().equals("FMB")) {
+            jsonStr = new String(Files.readAllBytes(Paths.get("bot/botData/fmb.json")));
+        }
+        JSONObject json = new JSONObject(jsonStr);
+        if(ThreadSafeTestContext.getBotName().equals("NS") || ThreadSafeTestContext.getBotName().equals("NL")) {
+            chromeDriver.findElement(By.xpath("//textarea[@id='footer']")).sendKeys(json.getString("teacherCode"));
+            chromeDriver.findElement(By.xpath("//button[@class='MuiButtonBase-root MuiIconButton-root " +
+                    "MuiIconButton-sizeMedium chat-footer__send-button css-1yxmbwk']")).click();
+            Thread.sleep(2000);
+            ThreadSafeTestContext.setSchoolCode(json.getString("teacherCode"));
+        }
+    }
+
+    public void setSICode() throws InterruptedException, IOException {
+        if(ThreadSafeTestContext.getBotName().equals("NS") || ThreadSafeTestContext.getBotName().equals("NL")) {
+            jsonStr = new String(Files.readAllBytes(Paths.get("src/main/java/bot/botData/ns.json")));
+        } else if(ThreadSafeTestContext.getBotName().equals("ATTENDANCE")) {
+            jsonStr = new String(Files.readAllBytes(Paths.get("bot/botData/attendance_gj.json")));
+        } else if(ThreadSafeTestContext.getBotName().equals("FMB")) {
+            jsonStr = new String(Files.readAllBytes(Paths.get("bot/botData/fmb.json")));
+        }
+        JSONObject json = new JSONObject(jsonStr);
+        chromeDriver.findElement(By.xpath("//textarea[@id='footer']")).sendKeys(json.getString("teacherID"));
+        chromeDriver.findElement(By.xpath("//button[@class='MuiButtonBase-root MuiIconButton-root " +
+                "MuiIconButton-sizeMedium chat-footer__send-button css-1yxmbwk']")).click();
+        Thread.sleep(2000);
+        ThreadSafeTestContext.setSchoolCode(json.getString("schoolCode"));
+    }
     public void sendFile() {
 
     }
@@ -45,11 +96,7 @@ public class Chat extends BotBase implements FilesPath {
 
    public void validateResponseStringForNamoLaxmi(String str1 , String str2) throws IOException, InterruptedException {
        validateResponseString(filePathForNL ,str1, str2);
-       Thread.sleep(2000);
 
-       Select select = new Select(chromeDriver.findElement(By.xpath("")));
-       select.selectByVisibleText("8 AM");
-       String selected = select.getFirstSelectedOption().getText();
    }
     public void validateResponseStringForNamoLaxmi(String str1 , String str2 , String str3) throws IOException, InterruptedException {
         validateResponseString(filePathForNL ,str1, str2, str3);
@@ -128,6 +175,12 @@ public class Chat extends BotBase implements FilesPath {
         }
     }
 
+    /**
+     * Created for only Namo Bots
+     * Uses : To select class and section for Namo Bots like Namo Saraswati and Namo Laxmi
+     *
+     * @throws InterruptedException
+     */
     public void selectClassAndSectionForNamoBots() throws InterruptedException {
         List<WebElement> classes = chromeDriver.findElements(By.xpath(
                 "//div/button[contains(@class,'MuiButton-outlinedSizeMedium')]//p/p[contains(text(),'Class')]"));
@@ -455,6 +508,7 @@ public class Chat extends BotBase implements FilesPath {
 
 
     // Java
+
     private void selectClassByName(String classText) throws InterruptedException {
         List<WebElement> classes;
         try {
@@ -677,10 +731,9 @@ public class Chat extends BotBase implements FilesPath {
         List<WebElement> buttons = chromeDriver.findElements(By.xpath(
                 "(//div[@style='transform-origin: left top; transform: none;'])[last()]" +
                         "/ancestor::div[2]/following-sibling::div[last()]//div/following-sibling::div" +
-                        "//button//p/p[contains(text(), '"+button1+"') or contains(text(), " +
-                        "'"+button2+"')] "));
+                        "//button//p/p[text()= '"+button1+"' or text()= '"+button2+"']"));
         Thread.sleep(2000);
-        if(buttons==null && buttons.size() < 2) {
+        if(buttons.size() < 2) {
             Assert.fail("Buttons with text: " + button1 + " and " + button2 + " not found.");
         } else {
             System.out.println("Buttons with text: " + button1 + " and " + button2 + " found.");
@@ -709,12 +762,12 @@ public class Chat extends BotBase implements FilesPath {
         //[starts-with(normalize-space(text()), '" + cleanClass + "')]")).click();
 
          // e.g., "Gujarati"
-        String translatedLabel = LangMapper.getLocalized(option, ThreadSafeTestContext.getMedium());
+        //String translatedLabel = LangMapper.getLocalized(option, ThreadSafeTestContext.getMedium());
 
         Thread.sleep(5000);
         chromeDriver.findElement(By.xpath(
                 "//div/button//p/p[starts-with(normalize-space(text()), '" +
-                        translatedLabel.replaceAll("\\s*\\(\\d+/\\d+\\)", "").trim() +
+                        option.replaceAll("\\s*\\(\\d+/\\d+\\)", "").trim() +
                         "')]")).click();
         //chromeDriver.findElement(By.xpath("//div/button//p/p[text()='"+option.replaceAll("\\s*\\(.*?\\)", "").trim()+"']")).click();
         Thread.sleep(2000);

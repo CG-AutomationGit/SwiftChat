@@ -1,10 +1,9 @@
-package namosaraswati;
+package namolaxmi;
 
 import bot.BotLogin;
 import bot.base.BotBase;
 import bot.botChat.BotList;
 import bot.botChat.Chat;
-import org.openqa.selenium.json.Json;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -12,12 +11,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.security.InvalidKeyException;
 
+
+
 import static bot.botData.BotData.schoolID;
 import static bot.botData.BotData.teacherID;
 
-public class NS_AutomationRun0001 extends BotBase {
+public class NL_AutomationRun0001 extends BotBase {
 
-    public NS_AutomationRun0001(){
+    public NL_AutomationRun0001(){
         super(null);
     }
 
@@ -27,7 +28,7 @@ public class NS_AutomationRun0001 extends BotBase {
 
     @BeforeTest(alwaysRun = true)
     public void step1_openChrome() throws MalformedURLException, InvalidKeyException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        loginPage = launchChromeForBot("NS",BotLogin.class);
+        loginPage = launchChromeForBot("NL",BotLogin.class);
     }
 
     @Test(priority = 1)
@@ -70,7 +71,7 @@ public class NS_AutomationRun0001 extends BotBase {
 
     @Test(priority = 8)
     public void testValidateResponseGifSt009() throws Exception {
-        chat.validateResponseStringForNamoSaraswati("GIF", "ST009");
+        chat.validateResponseStringForNamoLaxmi("GIF", "ST009");
     }
 
     @Test(priority = 9)
@@ -80,7 +81,7 @@ public class NS_AutomationRun0001 extends BotBase {
 
     @Test(priority = 10)
     public void testValidateResponseGifVideoSt010() throws Exception {
-        chat.validateResponseStringForNamoSaraswati("GIF", "VIDEO", "ST010");
+        chat.validateResponseStringForNamoLaxmi("GIF", "VIDEO", "ST010");
     }
 
     @Test(priority = 11)
@@ -90,7 +91,7 @@ public class NS_AutomationRun0001 extends BotBase {
 
     @Test(priority = 12)
     public void testValidateResponseSt012() throws Exception {
-        chat.validateResponseStringForNamoSaraswati("ST012");
+        chat.validateResponseStringForNamoLaxmi("ST012");
     }
 
     @Test(priority = 13)
@@ -100,7 +101,7 @@ public class NS_AutomationRun0001 extends BotBase {
 
     @Test(priority = 14)
     public void testValidateResponseSt016() throws Exception {
-        chat.validateResponseStringForNamoSaraswati("ST016");
+        chat.validateResponseStringForNamoLaxmi("ST016");
     }
 
     @Test(priority = 15)
@@ -110,7 +111,7 @@ public class NS_AutomationRun0001 extends BotBase {
 
     @Test(priority = 16)
     public void testValidateResponseSt019() throws Exception {
-        chat.validateResponseStringForNamoSaraswati("ST019");
+        chat.validateResponseStringForNamoLaxmi("ST019");
     }
 
     @Test(priority = 17)
@@ -120,7 +121,7 @@ public class NS_AutomationRun0001 extends BotBase {
 
     @Test(priority = 18)
     public void testValidateResponseSt020() throws Exception {
-        chat.validateResponseStringForNamoSaraswati("ST020");
+        chat.validateResponseStringForNamoLaxmi("ST020");
     }
 
     @Test(priority = 19)
@@ -130,7 +131,7 @@ public class NS_AutomationRun0001 extends BotBase {
 
     @Test(priority = 20)
     public void testValidateResponseGifSt025St026() throws Exception {
-        chat.validateResponseStringForNamoSaraswati("GIF", "ST025", "ST026");
+        chat.validateResponseStringForNamoLaxmi("GIF", "ST025", "ST026");
     }
 
     @Test(priority = 21)
@@ -145,7 +146,7 @@ public class NS_AutomationRun0001 extends BotBase {
 
     @Test(priority = 23)
     public void testValidateResponseSt029() throws Exception {
-        chat.validateResponseStringForNamoSaraswati("ST029");
+        chat.validateResponseStringForNamoLaxmi("ST029");
     }
 
     @Test(priority = 24)
@@ -155,7 +156,7 @@ public class NS_AutomationRun0001 extends BotBase {
 
     @Test(priority = 25)
     public void testValidateResponsePdfSt035St040() throws Exception {
-        chat.validateResponseStringForNamoSaraswati("PDF", "ST035_COMP", "ST040");
+        chat.validateResponseStringForNamoLaxmi("PDF", "ST035_COMP", "ST040");
     }
 
     @Test(priority = 26)
@@ -165,7 +166,7 @@ public class NS_AutomationRun0001 extends BotBase {
 
     @Test(priority = 27)
     public void testValidateResponsePdfSt035St040Again() throws Exception {
-        chat.validateResponseStringForNamoSaraswati("PDF", "ST035_COMP", "ST040");
+        chat.validateResponseStringForNamoLaxmi("PDF", "ST035_COMP", "ST040");
     }
 
     @Test(priority = 28)
@@ -175,7 +176,7 @@ public class NS_AutomationRun0001 extends BotBase {
 
     @Test(priority = 29)
     public void testValidateResponseSt026() throws Exception {
-        chat.validateResponseStringForNamoSaraswati("ST026");
+        chat.validateResponseStringForNamoLaxmi("ST026");
     }
 
     @Test(priority = 30)
@@ -196,13 +197,13 @@ public class NS_AutomationRun0001 extends BotBase {
     @Test(priority = 33)
     public void testValidateResponseST046ST026() throws Exception {
         //chat.selectClassAndSection();
-        chat.validateResponseStringForNamoSaraswati("ST046","ST026");
+        chat.validateResponseStringForNamoLaxmi("ST046","ST026");
     }
 
     // Java
    /* @Test(priority = 34)
     public void testValidateResponseSt084() throws Exception {
-        chat.validateResponseStringForNamoSaraswati("ST084");
+        chat.validateResponseStringForNamoLaxmi("ST084");
     }*/
 
     @Test(priority = 35)
@@ -217,7 +218,7 @@ public class NS_AutomationRun0001 extends BotBase {
 
     @Test(priority = 37)
     public void testValidateResponseSt029Again() throws Exception {
-        chat.validateResponseStringForNamoSaraswati("ST029");
+        chat.validateResponseStringForNamoLaxmi("ST029");
     }
 
     @Test(priority = 38)
@@ -227,7 +228,7 @@ public class NS_AutomationRun0001 extends BotBase {
 
     @Test(priority = 39)
     public void testValidateResponseST005() throws Exception {
-        chat.validateResponseStringForNamoSaraswati("ST005");
+        chat.validateResponseStringForNamoLaxmi("ST005");
         chat.selectButtonOptionFromChat("Yes");
     }
 
@@ -243,7 +244,7 @@ public class NS_AutomationRun0001 extends BotBase {
 
     @Test(priority = 42)
     public void testValidateResponseSt005() throws Exception {
-        chat.validateResponseStringForNamoSaraswati("ST005");
+        chat.validateResponseStringForNamoLaxmi("ST005");
     }
 
     @Test(priority = 43)
@@ -253,7 +254,7 @@ public class NS_AutomationRun0001 extends BotBase {
 
     @Test(priority = 44)
     public void testValidateResponseSt029Final() throws Exception {
-        chat.validateResponseStringForNamoSaraswati("ST026");
+        chat.validateResponseStringForNamoLaxmi("ST026");
     }
 
 

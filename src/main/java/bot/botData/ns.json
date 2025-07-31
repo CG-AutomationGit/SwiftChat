@@ -1,0 +1,25 @@
+{
+  "schoolCode": "24091501372",
+  "teacherCode": "10378453",
+  "teacherName": "SHILU KAJAL",
+  "teacherDesignation": "Teacher",
+  "schoolName": "SKP PRANAMI PRI.SEC.SCHOOL",
+  "blockName": "RAJKOT CORPORATION",
+  "districtName": "RAJKOT",
+  "schoolState": "GJ",
+  "grades": {
+    "grade1": { "name": "Class 1", "section": "A" },
+    "grade2": { "name": "Class 2", "section": "B" },
+    "grade3": { "name": "Class 3", "section": "C" },
+    "grade4": { "name": "Class 4", "section": "D" },
+    "grade5": { "name": "Class 5", "section": "E" },
+    "grade6": { "name": "Class 6", "section": "F" },
+    "grade7": { "name": "Class 7", "section": "G" },
+    "grade8": { "name": "Class 8", "section": "H" },
+    "grade9": { "name": "Class 9", "section": "I" },
+    "grade10": { "name": "Class 10", "section": "J" },
+    "grade11": { "name": "Class 11", "section": "K" },
+    "grade12": { "name": "Class 12", "section": "L" },
+    "grade13": { "name": "Class 13", "section": "M" }
+  }
+}

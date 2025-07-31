@@ -983,9 +983,6 @@ public class NamoBotsWebView extends WebViewBase {
 
     }
 
-
-
-
     private boolean isValidationMessageDisplayedForOnlyRequiredField(String fieldName){
         try {
             Thread.sleep(2000); // Wait for the file to be processed

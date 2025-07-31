@@ -101,6 +101,7 @@ public class Engine {
         // String path = "C:\\chromeDriver\\135\\chromedriver\\chromedriver\\chromedriver.exe";
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--remote-allow-origins=*");
+        options.addArguments("--disable-notifications");
         options.addArguments("--force-device-scale-factor=0.80");
         // System.setProperty("webdriver.chrome.driver", path);*/
         chromeDriver = new ChromeDriver(options);

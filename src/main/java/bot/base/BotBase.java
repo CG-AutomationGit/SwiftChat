@@ -2,24 +2,27 @@ package bot.base;
 
 import botEngine.PageObjectModel;
 import bot.botChat.Chat;
-import bot.botData.BotData;
 import bot.botData.ThreadSafeTestContext;
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openqa.selenium.*;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
+import org.json.JSONObject;
+
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -42,42 +45,82 @@ public class BotBase extends PageObjectModel {
     }
 
     public void validateResponseString(String filepath , String str1 , String str2) throws IOException {
-        if(getResponseCount()==2){
-            String expectedString1 = getCellValueFromExcel(filepath,"String Mapping for v1", str1, "English Strings");
-            String expectedString2 = getCellValueFromExcel(filepath,"String Mapping for v1", str2, "English Strings");
 
-            String safeExpected1 = processExpectedString(expectedString1);
-            String safeExpected2 = processExpectedString(expectedString2);
+        String jsonStr = "";
+
+        if(ThreadSafeTestContext.getBotName().equals("NS") || ThreadSafeTestContext.getBotName().equals("NL")) {
+            jsonStr = new String(Files.readAllBytes(Paths.get("src/main/java/bot/botData/ns.json")));
+        } else if(ThreadSafeTestContext.getBotName().equals("ATTENDANCE")) {
+            jsonStr = new String(Files.readAllBytes(Paths.get("bot/botData/attendance_gj.json")));
+        } else if(ThreadSafeTestContext.getBotName().equals("FMB")) {
+            jsonStr = new String(Files.readAllBytes(Paths.get("bot/botData/fmb.json")));
+        }
+
+        JSONObject json = new JSONObject(jsonStr);
+
+
+        if(getResponseCount()==2){
+            String expectedString1 ="",expectedString2="",finalExpected1="" ,finalExpected2="";
+            if(!(str1.equalsIgnoreCase("PDF") || str1.equalsIgnoreCase("DOC") ||
+                    str1.equalsIgnoreCase("GIF") || str1.equalsIgnoreCase("VIDEO") ||
+                    str1.equalsIgnoreCase("_COMP"))) {
+                expectedString1 = getCellValueFromExcel(filepath, "String Mapping for v1", str1, "English String");
+
+                Set<String> placeholders = extractPlaceholders(expectedString1);
+
+                // Step 3: Build map with only needed data
+                Map<String, String> replacementMap = new HashMap<>();
+                for (String key : placeholders) {
+                    replacementMap.put(key, json.optString(key, "<" + key + ">")); // fallback to <key> if missing
+                }
+                // Step 4: Replace in template
+                 finalExpected1 = replacePlaceholders(expectedString1, replacementMap);
+            }
+            if(!(str2.equalsIgnoreCase("PDF") || str2.equalsIgnoreCase("DOC") ||
+                    str2.equalsIgnoreCase("GIF") || str2.equalsIgnoreCase("VIDEO") ||
+                    str2.equalsIgnoreCase("_COMP"))) {
+                expectedString2 = getCellValueFromExcel(filepath, "String Mapping for v1", str2, "English String");
+
+                Set<String> placeholders2 = extractPlaceholders(expectedString2);
+
+                // Step 3: Build map with only needed data
+                Map<String, String> replacementMap2 = new HashMap<>();
+                for (String key : placeholders2) {
+                    replacementMap2.put(key, json.optString(key, "<" + key + ">")); // fallback to <key> if missing
+                }
+                // Step 4: Replace in template
+                 finalExpected2 = replacePlaceholders(expectedString2, replacementMap2);
+            }
 
             String actualString1 = getFirstStringAfterInput(str1);
 
             if(actualString1.equals(str1)){
                 Assert.assertEquals(actualString1, str1, "String validation failed for first string.");
 
-                List<String> ext =  extractBoldSegments(safeExpected2);
+                List<String> ext =  extractBoldSegments(finalExpected2);
                 String actualString2 = getSecondStringAfterInput(str2);
 
                 validateBoldTextInUI(ThreadSafeTestContext.getStringLocator(), ext);
 
-                Assert.assertTrue(areStringsEquivalent(actualString2, safeExpected2.replace("*","")),
+                Assert.assertTrue(areStringsEquivalent(actualString2, finalExpected2.replace("*","")),
                         "String validation failed \n" +
-                                "Expected : ["+safeExpected2+"] \n" +
+                                "Expected : ["+finalExpected2+"] \n" +
                                 "Actual : ["+actualString2+"]");
 
             }
             else {
                 String actualString2 = getSecondStringAfterInput(str2);
 
-                List<String> ext =  extractBoldSegments(safeExpected2);
+                List<String> ext =  extractBoldSegments(finalExpected2);
                 validateBoldTextInUI(ThreadSafeTestContext.getStringLocator(), ext);
 
-                Assert.assertTrue(areStringsEquivalent(actualString1, safeExpected1.replace("*","")),
+                Assert.assertTrue(areStringsEquivalent(actualString1, finalExpected1.replace("*","")),
                         "String validation failed \n" +
-                                "Expected : ["+safeExpected1+"] \n" +
+                                "Expected : ["+finalExpected1+"] \n" +
                                 "Actual : ["+actualString1+"]");
-                Assert.assertTrue(areStringsEquivalent(actualString2, safeExpected2.replace("*","")),
+                Assert.assertTrue(areStringsEquivalent(actualString2, finalExpected2.replace("*","")),
                         "String validation failed \n" +
-                                "Expected : ["+safeExpected2+"] \n" +
+                                "Expected : ["+finalExpected2+"] \n" +
                                 "Actual : ["+actualString2+"]");
             }
         }
@@ -88,40 +131,29 @@ public class BotBase extends PageObjectModel {
 
     public String getCellValueFromExcel(String filepath , String SheetName, String StringID, String coumnName) throws IOException, IOException {
         //String filePath = "C:\\Users\\gandi\\Downloads\\SwiftChat (3)\\SwiftChat\\Testdata\\strings.xlsx";
-        String langString="";
-        FileInputStream fis = new FileInputStream(filepath);
-        Workbook workbook = new XSSFWorkbook(fis);
-        Sheet sheet = workbook.getSheet(SheetName);
-
-        Cell stringIDCell =null; // Column B (index 1)
-        Cell lanString  =null;
-
-        for (Row row : sheet) {
-            if (row.getRowNum() == 0)
-                continue; // Skip header
-
-                  switch (ThreadSafeTestContext.getBotName()) {
-                      case "ATTENDANCE":
-                           stringIDCell = row.getCell(0);
-                           lanString = row.getCell(7);
-                          break;
-                      case "NL":
-                      case "NS":
-                           stringIDCell = row.getCell(0);
-                           lanString = row.getCell(9);
-                          break;
-                      case "FMB":
-                          /*stringIDCell = row.getCell(0);
-                          lanString = row.getCell(8);*/
-                  }
-
-            if (stringIDCell != null && StringID.equalsIgnoreCase(stringIDCell.getStringCellValue().trim())){
-                if (lanString != null) {
-                    langString = lanString.getStringCellValue().trim();
+        String templateText = null;
+        FileInputStream file = new FileInputStream(filepath);
+        XSSFWorkbook workbook = new XSSFWorkbook(file);
+        XSSFSheet sheet = workbook.getSheet(SheetName);
+        Row headerRow = sheet.getRow(0);
+        Map<String, Integer> columnIndex = new HashMap<>();
+        for (Cell cell : headerRow) {
+            columnIndex.put(cell.getStringCellValue(), cell.getColumnIndex());
+        }
+        for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+            Row row = sheet.getRow(i);
+            if (row != null) {
+                Cell idCell = row.getCell(columnIndex.get("String ID"));
+                if (idCell != null && idCell.getStringCellValue().equalsIgnoreCase(StringID)) {
+                    Cell valueCell = row.getCell(columnIndex.get(coumnName));
+                    templateText = valueCell.getStringCellValue();
+                    break;
                 }
             }
         }
-        return langString;
+        workbook.close();
+        file.close();
+        return templateText;
     }
 
     public void validateResponseString(String filepath , String str1 , String str2 , String str3) throws IOException, InterruptedException {
@@ -136,13 +168,13 @@ public class BotBase extends PageObjectModel {
 
 
             if (containsDigit(str1)) {
-                expectedString1 = getCellValueFromExcel(filepath, "String Mapping for v1", str1, "English Strings");
+                expectedString1 = getCellValueFromExcel(filepath, "String Mapping for v1", str1, "English String");
             }
             if (containsDigit(str2)) {
-                expectedString2 = getCellValueFromExcel(filepath, "String Mapping for v1", str2.replace("_COMP",""), "English Strings");
+                expectedString2 = getCellValueFromExcel(filepath, "String Mapping for v1", str2.replace("_COMP",""), "English String");
             }
             if (containsDigit(str3)) {
-                expectedString3 = getCellValueFromExcel(filepath, "String Mapping for v1", str3, "English Strings");
+                expectedString3 = getCellValueFromExcel(filepath, "String Mapping for v1", str3, "English String");
             }
             String safeExpected1 = processExpectedString(expectedString1);
             String safeExpected2 = processExpectedString(expectedString2);
@@ -197,35 +229,48 @@ public class BotBase extends PageObjectModel {
         return s != null && s.matches(".*\\d.*");
     }
 
-    private String processExpectedString(String expected) {
+    private String processExpectedString(String expected) throws IOException {
         if (expected == null) return null;
         String safeExpected = expected;
+        String jsonStr = "";
+
+        if(ThreadSafeTestContext.getBotName().equals("NS") || ThreadSafeTestContext.getBotName().equals("NL")) {
+            jsonStr = new String(Files.readAllBytes(Paths.get("src/main/java/bot/botData/ns.json")));
+        } else if(ThreadSafeTestContext.getBotName().equals("ATTENDANCE")) {
+            jsonStr = new String(Files.readAllBytes(Paths.get("bot/botData/attendance_gj.json")));
+        } else if(ThreadSafeTestContext.getBotName().equals("FMB")) {
+            jsonStr = new String(Files.readAllBytes(Paths.get("bot/botData/fmb.json")));
+        }
+       JSONObject json = new JSONObject(jsonStr);
 
 
+/*
         if (safeExpected.contains("<teacherCode>"))
-            safeExpected = safeExpected.replace("<teacherCode>", BotData.teacherID);
+            safeExpected = safeExpected.replace("<teacherCode>", json.getString("teacherID"));
+        if (safeExpected.contains("<teacherID>"))
+            safeExpected = safeExpected.replace("<teacherID>", json.getString("teacherID"));
         if (safeExpected.contains("<schoolName>"))
-            safeExpected = safeExpected.replace("<schoolName>", BotData.schoolName);
+            safeExpected = safeExpected.replace("<schoolName>", json.getString("schoolName"));
         if (safeExpected.contains("<classNo>"))
             safeExpected = safeExpected.replace("<classNo>", ThreadSafeTestContext.getGrade());
         if (safeExpected.contains("<section>"))
             safeExpected = safeExpected.replace("<section>",ThreadSafeTestContext.getSection());
         if (safeExpected.contains("<schoolCode>"))
-            safeExpected = safeExpected.replace("<schoolCode>", BotData.schoolID);
+            safeExpected = safeExpected.replace("<schoolCode>", json.getString("schoolID"));
         if (safeExpected.contains("<teacherName>"))
-            safeExpected = safeExpected.replace("<teacherName>", BotData.teacherName);
+            safeExpected = safeExpected.replace("<teacherName>", json.getString("teacherName"));
         if (safeExpected.contains("<designation>"))
-            safeExpected = safeExpected.replace("<designation>", BotData.teacherDesignation);
+            safeExpected = safeExpected.replace("<designation>", json.getString("teacherDesignation"));
         if (safeExpected.contains("<blockName>"))
-            safeExpected = safeExpected.replace("<blockName>", BotData.schoolBlock);
+            safeExpected = safeExpected.replace("<blockName>", json.getString("schoolBlock"));
         if (safeExpected.contains("<districtName>"))
-            safeExpected = safeExpected.replace("<districtName>", BotData.schoolDistrict);
+            safeExpected = safeExpected.replace("<districtName>", json.getString("schoolDistrict"));
         if (safeExpected.contains("<mediumName>"))
             safeExpected = safeExpected.replace("<mediumName>", ThreadSafeTestContext.getMedium());
         if (safeExpected.contains("<block>"))
-            safeExpected = safeExpected.replace("<block>", BotData.schoolBlock);
+            safeExpected = safeExpected.replace("<block>", json.getString("blockName"));
         if (safeExpected.contains("<district>"))
-            safeExpected = safeExpected.replace("<district>", BotData.schoolDistrict);
+            safeExpected = safeExpected.replace("<district>", json.getString("districtName"));*/
         return safeExpected;
     }
 
@@ -633,23 +678,57 @@ public class BotBase extends PageObjectModel {
         }
     }
 
-
+    public static Set<String> extractPlaceholders(String text) {
+        Set<String> keys = new LinkedHashSet<>();
+        Matcher matcher = Pattern.compile("<(.*?)>").matcher(text);
+        while (matcher.find()) {
+            keys.add(matcher.group(1));
+        }
+        return keys;
+    }
+    public static String replacePlaceholders(String text, Map<String, String> values) {
+        for (Map.Entry<String, String> entry : values.entrySet()) {
+            text = text.replace("<" + entry.getKey() + ">", entry.getValue());
+        }
+        return text;
+    }
     public void validateResponseString(String filepath , String str1) throws IOException {
+        String jsonStr = "";
+
+        if(ThreadSafeTestContext.getBotName().equals("NS") || ThreadSafeTestContext.getBotName().equals("NL")) {
+            jsonStr = new String(Files.readAllBytes(Paths.get("src/main/java/bot/botData/ns.json")));
+        } else if(ThreadSafeTestContext.getBotName().equals("ATTENDANCE")) {
+            jsonStr = new String(Files.readAllBytes(Paths.get("bot/botData/attendance_gj.json")));
+        } else if(ThreadSafeTestContext.getBotName().equals("FMB")) {
+            jsonStr = new String(Files.readAllBytes(Paths.get("bot/botData/fmb.json")));
+        }
+
+        JSONObject json = new JSONObject(jsonStr);
+
+
         if(getResponseCount()==1){
             String string="";
             if(!str1.equals("GIF") || !str1.equals("PDF")) {
-
                 string=str1;
             }
             //areStringsEquivalent(actualString, string);
 
             String expectedString = getCellValueFromExcel(filepath, "String Mapping for v1", str1, "English String");
-            String safeExpected1 = processExpectedString(expectedString);
-            List<String> ext =  extractBoldSegments(safeExpected1);
+            Set<String> placeholders = extractPlaceholders(expectedString);
+
+            // Step 3: Build map with only needed data
+            Map<String, String> replacementMap = new HashMap<>();
+            for (String key : placeholders) {
+                replacementMap.put(key, json.optString(key, "<" + key + ">")); // fallback to <key> if missing
+            }
+            // Step 4: Replace in template
+            String finalText = replacePlaceholders(expectedString, replacementMap);
+
+            List<String> ext =  extractBoldSegments(finalText);
             String actualString = getFirstStringAfterInput(string);
 
             validateBoldTextInUI(ThreadSafeTestContext.getStringLocator(), ext);
-            Assert.assertTrue(areStringsEquivalent(actualString, safeExpected1.replace("*","")), "String validation failed for first string.");
+            Assert.assertTrue(areStringsEquivalent(actualString, finalText.replace("*","")), "String validation failed for first string.");
         }
         else {
             Assert.assertEquals(getResponseCount(), 1, "Expected 1 response but got " + getResponseCount());
