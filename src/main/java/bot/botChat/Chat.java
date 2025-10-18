@@ -901,7 +901,7 @@ public class Chat extends BotBase implements FilesPath {
 
     }
 
-    // Java Ishan
+    // Java
 
 
 }
