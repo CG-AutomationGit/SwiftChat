@@ -902,6 +902,6 @@ public class Chat extends BotBase implements FilesPath {
     }
 
     // Java
-    // Update 
+    // Update TIKA
 
 }
