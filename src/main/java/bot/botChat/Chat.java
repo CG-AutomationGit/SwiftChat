@@ -901,7 +901,11 @@ public class Chat extends BotBase implements FilesPath {
 
     }
 
-    // Java PLUS
+    // Java PLUS S
 
+    public void validateResponseStringForAttendanceBot1(String str1) throws IOException, InterruptedException {
+        validateResponseString(filePathForATTENDANCE ,str1);
+        Thread.sleep(2000);
 
+    }
 }
