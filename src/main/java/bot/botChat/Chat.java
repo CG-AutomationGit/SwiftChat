@@ -903,7 +903,7 @@ public class Chat extends BotBase implements FilesPath {
     }
 
     // Java
-    // Update TIKA VUKA JIKA VIKA MERGE AGAIN
+    // Update TIKA VUKA JIKA VIKA MERGE AGAIN PULL
 
     public void validateResponseStringForAttendanceBot2(String str1) throws IOException, InterruptedException {
         validateResponseString(filePathForATTENDANCE ,str1);
