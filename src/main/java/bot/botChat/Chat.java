@@ -901,19 +901,4 @@ public class Chat extends BotBase implements FilesPath {
         Thread.sleep(2000);
 
     }
-
-    // Java
-    // Update TIKA VUKA JIKA VIKA MERGE AGAIN PULL AGAIN FETCH & MERGE
-
-    public void validateResponseStringForAttendanceBot2(String str1) throws IOException, InterruptedException {
-        validateResponseString(filePathForATTENDANCE ,str1);
-        Thread.sleep(2000);
-
-    }
-
-    public void validateResponseStringForAttendanceBot1(String str1) throws IOException, InterruptedException {
-        validateResponseString(filePathForATTENDANCE ,str1);
-        Thread.sleep(2000);
-
-    }
 }
