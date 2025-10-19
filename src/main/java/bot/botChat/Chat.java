@@ -914,4 +914,8 @@ public class Chat extends BotBase implements FilesPath {
         Thread.sleep(2000);
 
     }
+
+    public void buttonDisplayed(){
+       ///////////////////////
+    }
 }
